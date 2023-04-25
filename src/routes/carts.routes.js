@@ -1,22 +1,27 @@
-const express = require('express');
+import {Router} from 'express';
+import CartManager from '../CartManager.js';
+import ProductManager from '../ProductManager.js';
 
-const cartRouter = express.Router();
-const CartManager = require('../scriptcart.js');
-const cartManager = new CartManager('./carrito.json')
+const cartsRouter = Router();
+const cartManager = new CartManager('./carts.json');
+const manager = new ProductManager('./products.json');
 const emptyCart = [];
 
-cartRouter.post('/api/carts', async (req, res) => {
+cartsRouter.post('/', async (req, res) => {
     await cartManager.addCart(emptyCart)
     .then(res.status(200).send({state: 'added', message: 'ok'}))
 });
 
-cartRouter.post('./api/carts/:cid?/product/:pid?', async (req, res) => {
-    
+cartsRouter.post('/:cid?/product/:pid?', async (req, res) => {
+    const productId = req.params.pid;
+    const cartId = req.params.cid;
+    await cartManager.updateCarts(cartId, productId)
+    .then(res.status(200).send({state: 'added', message: 'ok'}))
 });
 
-cartRouter.get('/api/carts/:cid?', (req, res) => {
-    const cartProductsById = cartManager.getProductsById(req.params.cid);
+cartsRouter.get('/:cid?', (req, res) => {
+    const cartProductsById = cartManager.getCartsById(req.params.cid);
     cartProductsById.then(cartProducts => res.status(200).send(cartProducts));
 });
 
-module.exports = cartRouter;
+export default cartsRouter;

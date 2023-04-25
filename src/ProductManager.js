@@ -1,16 +1,13 @@
-const fs = require('fs');
+import * as fs from 'fs';
 
 class ProductManager {
-
-    static lastId = 0;
-
+    
     constructor(path) {
         this.path = path;
-        this.products = [];
+        this.products = []
     }
 
-    addProduct =  async (title, description, price, thumbnail, code, stock) => {
-        ProductManager.lastId++
+    addProduct = async (title, description, price, thumbnail, code, stock) => {
         const newProduct = {
             title: title,
             description: description,
@@ -18,21 +15,29 @@ class ProductManager {
             thumbnail: thumbnail,
             code: code,
             stock: stock,
-            id: ProductManager.lastId,
+            id: 0,
+        }
+
+        if( title === undefined || description === undefined || code === undefined || price === undefined || stock === undefined){
+            return false
+        }
+
+        if( thumbnail === undefined ){
+            thumbnail = []
         }
 
         const products = await fs.promises.readFile(this.path, 'utf-8');
         const productJSON = JSON.parse(products)
         if(!productJSON.some(product => product.code === newProduct.code)) {
+            newProduct.id = productJSON[productJSON.length - 1].id + 1;
             productJSON.push(newProduct); 
             this.products.push(newProduct);
             const archiveChain = JSON.stringify(productJSON);
             await fs.promises.writeFile(this.path, archiveChain); 
-        } else {
-            
+        } else { 
             console.log('exists!');
             }
-        }
+        } 
 
     getProduct = async () => {
         const products = await fs.promises.readFile(this.path, 'utf-8');
@@ -41,6 +46,7 @@ class ProductManager {
     }
 
     getProductById = async (idPassed) => {
+        console.log(this.products)
         const products = await fs.promises.readFile(this.path, 'utf-8')
         const productJSON = JSON.parse(products);
         const checkId = productJSON.find(product => product.id == idPassed);
@@ -53,21 +59,22 @@ class ProductManager {
 
     updateProduct = async (idPassed, infoFromBody) =>{
         const infoToChangeArray = Object.keys(infoFromBody).map((key) => [key, infoFromBody[key]])
-        const fieldToChange = infoToChangeArray[0][0];
-        const infoToChange = infoToChangeArray[0][1];
-        console.log(infoToChange)
-        const products = await fs.promises.readFile(this.path, 'utf-8')
-        const productJSON = JSON.parse(products);
-
-        const index = productJSON.findIndex(product => product.id === parseInt(idPassed));
-           if (index !== -1){
-            productJSON[index][fieldToChange] = infoToChange;
-        } else {
-             return 'Not Found'
-            }
-        const archiveChain = JSON.stringify(productJSON);
-        this.products = archiveChain;
-        await fs.promises.writeFile(this.path, archiveChain);  
+         for (let i = 0; i < infoToChangeArray.length; i++) {            
+            const fieldToChange = infoToChangeArray[i][0];
+            const infoToChange = infoToChangeArray[i][1];
+            const products = await fs.promises.readFile(this.path, 'utf-8')
+            const productJSON = JSON.parse(products);
+    
+            const index = productJSON.findIndex(product => product.id === parseInt(idPassed));
+               if (index !== -1){
+                productJSON[index][fieldToChange] = infoToChange;
+            } else {
+                 return 'Not Found'
+                }
+            const archiveChain = JSON.stringify(productJSON);
+            this.products = archiveChain;
+            await fs.promises.writeFile(this.path, archiveChain);   
+        } 
     }
 
     deleteProduct = async (idPassed) =>{
@@ -87,4 +94,5 @@ class ProductManager {
     }
 }
 
-module.exports = ProductManager;
+
+export default ProductManager;
