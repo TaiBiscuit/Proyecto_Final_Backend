@@ -1,0 +1,31 @@
+<div>
+    <h1>List of products</h1>
+    <div class="container">
+        <div class="field">
+            {{#each products}}
+            <ul>
+                <li>Id</li>
+                <li>Title</li>
+                <li>Thumbnail</li>
+                <li>Price</li>
+                <li>Code</li>
+                <li>Description</li>
+                <li>Stock</li>
+            </ul>
+            {{/each}}
+        </div>
+        <div class="info">
+            {{#each products}}
+            <ul>
+                <li>{{this.id}}</li>
+                <li>{{this.title}}</li>
+                <li>{{this.thumbnail}}</li>
+                <li>{{this.price}}</li>
+                <li>{{this.code}}</li>
+                <li>{{this.description}}</li>
+                <li>{{this.stock}}</li>
+            </ul>
+            {{/each}} 
+        </div> 
+    </div>
+</div>
