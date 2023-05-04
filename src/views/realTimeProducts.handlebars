@@ -1,8 +1,25 @@
 <div>
     <h1>List of products</h1>
     <div class="container">
+        <h1>Add a product!</h1>
+        <form action="/realtimeproducts" method="POST" id="addForm" onsubmit="addProd">
+        <label>Title: <input type="text" name="title" placeholder="title" id="title"></label>
+        <label>Thumbnail: <input type="text" name="thumbnail" placeholder="thumbnail" id="thumbnail"></label>
+        <label>Price: <input type="number" name="price" placeholder="10" id="price"></label>
+        <label>Code: <input type="number" name="code" placeholder="1" id="code"></label>
+        <label>Description: <input type="text" name="description" placeholder="a description" id="description"></label>
+        <label>Stock: <input type="number" name="stock" placeholder="100" id="stock"></label>
+        <button>Add</button>
+        </form>
+
+        <h1>Delete a product!</h1>
+        <form action="/realtimeproducts?met=DELETE" method="POST" id="deleteForm" onsubmit="delProd">
+        <label>ID: <input type="number" name="id" placeholder="1" id="delId" min="1" ></label>
+        <button>Delete</button>
+        </form>
+
         <div class="field">
-            {{#each products}}
+            {{#each prodList}}
             <ul>
                 <li>Id</li>
                 <li>Title</li>
@@ -15,7 +32,7 @@
             {{/each}}
         </div>
         <div class="info">
-            {{#each products}}
+            {{#each prodList}}
             <ul>
                 <li>{{this.id}}</li>
                 <li>{{this.title}}</li>
@@ -27,5 +44,11 @@
             </ul>
             {{/each}} 
         </div> 
+        <div id="socket-info">
+
+        </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"></script>
+<script src="/public/js/realTime.js"></script>

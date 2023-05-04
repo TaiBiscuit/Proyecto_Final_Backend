@@ -24,13 +24,18 @@ server.use('/', router);
 
 //Socket
 
- const socketServer = new Server(httpServer);
+const socketServer = new Server(httpServer);
 let prodList = [];
 
 socketServer.on('connection', sock => {
     console.log('New connection started');
     sock.emit('prodList', prodList);
-    sock.on('addProduct', () => { io.sockets.emit('prodList', prodList);});
+    sock.on('addProd', () => { 
+        io.sockets.emit('prodList', prodList);
+    });
+    sock.on('delProd', () => {
+        io.sockets.emit('prodList', prodList);
+    });
 });  
 
 

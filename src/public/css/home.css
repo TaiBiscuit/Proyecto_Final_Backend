@@ -25,3 +25,32 @@ body{
     border-bottom: 1px solid grey;
   }
   
+  form{
+    display: flex;
+    flex-direction: column;
+  }
+
+  label{
+    margin: 1rem;
+
+  }
+
+  input{
+    height: 22px;
+    border: none;
+    border-radius: 5px;
+  }
+
+  button{
+    width: 100px;
+    height: 30px;
+    border: none;
+    font-weight: 600;
+    color: white;
+    background-color: black;
+  }
+
+  button:hover{
+    background-color: white;
+    color: black;
+  }
