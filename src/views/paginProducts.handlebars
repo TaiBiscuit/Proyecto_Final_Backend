@@ -1,0 +1,45 @@
+
+<div class="header">
+    <h2 class="title"><b>Listado de productos en existencia ({{pagination.totalDocs}} en total)</b></h2>
+
+    <div class="navbar">
+        <nav>
+            <ul class="pagination">
+                {{#if pagination.hasPrevPage}}
+                    <li><a href="{{pagination.prevPageUrl}}"><<</a></li>
+                {{else}}
+                    <li><a href="{{pagination.prevPageUrl}}"><<</a></li>
+                {{/if}}
+                {{#each pagination.pagesArray}}
+                    <li><a href="{{baseUrl}}?page={{this.index}}">0{{this.indexPgBar}}</a></li>
+                {{/each}}
+
+                {{#if pagination.hasNextPage}}
+                    <li><a href="{{pagination.nextPageUrl}}">>></a></li>
+                {{else}}
+                    <li><a href="{{pagination.nextPageUrl}}">>></a></li>
+                {{/if}}
+                <li><a href="{{pagination.pageURL}}/api/carts">Cart</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="content">
+    <div class="products">
+    {{#each products}}
+        <div class="product-card">
+            <h5 class="card-title">{{this.title}}</h5>
+            <img src="{{this.image}}" class="card-img" alt="Avatar">       
+            <div class="card-body">
+                <p class="card-cat">{{this.category}}</p>
+                <p class="card-text">{{this.description}}</p>
+                <p class="price">${{this.price}}</p>
+                    <button class="add-btn">Add to cart</button>
+            </div>
+        </div>
+    {{/each}}
+    </div>
+</div>
+<script>
+</script>
