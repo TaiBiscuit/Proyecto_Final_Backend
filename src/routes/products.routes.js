@@ -8,9 +8,8 @@ const manager = new ProductManager();
 const productRoutes = (io, PAGE_URL, LIMIT) => 
 { 
     productsRouter.get('/products', async (req, res) => {
+        let limit = req.query.limit;      
         try {
-            let limit = req.query.limit;
-
             if(limit === undefined) limit = LIMIT;
             if(req.query.page === undefined) req.query.page = 0;
             const result = await manager.getProducts(req.query.page * limit, limit);
