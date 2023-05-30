@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
-const {Schema} = mongoose;
+
 
 mongoose.pluralize(null);
 const collection = 'carts';
@@ -16,9 +16,9 @@ const schema = new mongoose.Schema({
     ]
 });
 
-/* schema.pre('find', function() {
+/*  schema.pre('find', function() {
     this.populate('products.products')
-});  */
+});   */
 
 schema.plugin(mongoosePaginate);
 
