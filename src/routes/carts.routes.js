@@ -10,11 +10,11 @@ cartsRouter.get('/carts', async (req, res) => {
 
         if(cartId != undefined) {
             const cartId = req.query.cid;
-            const cartFiltered = await cartManager.getCartById(cartId)
-            console.log(cartFiltered)
-            res.render('cart', {carts: cartFiltered});
+            const cartFiltered = await cartManager.getCartPopulated(cartId)
+            res.status(200).send(cartFiltered);
         } else {
             const cart = await cartManager.getCart();
+            console.log(cart)
             res.status(200).send(cart);
         }
     } catch (err) {
@@ -22,10 +22,10 @@ cartsRouter.get('/carts', async (req, res) => {
     }
 });
 
- cartsRouter.put('/carts/:cid?', async (req, res) => {
+ cartsRouter.put('/carts/:cid?/products/:pid?', async (req, res) => {
     try {
-        const cartId = req.query.cid;
-        const prodId = req.query.pid;
+        const cartId = req.params.cid;
+        const prodId = req.params.pid;
         const result = await cartManager.addProdToCart(cartId, prodId);
         res.status(200).send(result);
     } catch (err) {
@@ -35,10 +35,10 @@ cartsRouter.get('/carts', async (req, res) => {
 
 cartsRouter.delete('/carts/:cid?/products/:pid?', async (req, res) => {
     try {
-        const cartId = req.query.cid;
-        const prodId = req.query.pid;
+        const cartId = req.params.cid;
+        const prodId = req.params.pid;
         const result = await cartManager.deleteProdFromCart(cartId, prodId);
-        res.status(200).send(result);
+        res.status(200).send(prodId);
     } catch (err) {
         res.status(500).send({status: 'EM', error: err});
     }

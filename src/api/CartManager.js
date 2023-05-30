@@ -1,5 +1,6 @@
 import cartModel from './cart.model.js';
 import productModel from './product.model.js';
+import mongoose from 'mongoose';
 
 class CartManager {
 
@@ -17,10 +18,10 @@ class CartManager {
         }
     }
 
-    getCartById = async (cartId) => {
-        try {   
-            const cartFilterd = await cartModel.find({id:cartId}).lean();
-            return cartFilterd
+    getCartPopulated = async (cartId) => {
+        try {
+            const cart = await cartModel.find({id:cartId}).populate({ path: 'products.pid', model: productModel });
+            return cart;
         } catch (err) {
             this.status = -1;
             console.log(err)
@@ -29,42 +30,32 @@ class CartManager {
 
     addProdToCart = async (cartId, prodId) => {
         try {
-            let cart = await cartModel.find({id:cartId}).lean();
-            if(cart) {
-                const products = await productModel.find({id:prodId}).lean();
-                const productId = {
-                    _id: products[0]._id
-                };  
-                const index = cart.indexOf(productId);
-                console.log(index)
-                if(index > -1) {
-                    cart[0].products.qty++;
-                    return cart
-                } else {
-                    cart[0].products.push(productId); 
-                    let finalCart = await cartModel.find({id:cartId}).lean().populate('products')
-                    console.log(cart)
-                    return cart
-                }
-            } else {
-                return { status:"ERR", message: "The cart does not exist"}
-            }
+            console.log(prodId)
+            const cart = await cartModel.findOneAndUpdate(
+                {id:cartId},
+                {$push: { products: prodId}},
+                {new: true}
+                );
+            return cart
         } catch (err) {
             this.status = -1;
             console.log(err)
         }
     } 
 
-    deleteProdFromCart = async (cartId, prodId) => {
+    deleteProdFromCart = async (cid, pid) => {
         try {
-            let cart = await cartModel.find({id:cartId}).lean();
-            if(cart) {
-                const productToDelete = await productModel.find({id:prodId}).lean();
-                const productToDeleteId = productToDelete[0].id;
-                const productIndex = cart[0].indexOf(productToDeleteId);
-                cart[0].products.splice(productIndex, 1);
-                cartModel.updateOne(cart)
-            };
+            const cart = await cartModel.find({id: cid}).lean();
+            const cartId = cart[0]._id;
+            const product = await productModel.find({id: pid}).lean();
+            const productId = product[0]._id;
+            const process = await cartModel.findByIdAndUpdate(
+                new mongoose.Types.ObjectId(cartId),
+                { $pull: { products: productId}},
+                { new: true }
+            )
+            console.log(process);
+            return process;
         } catch (err) {
             this.status = -1;
             console.log(err)
