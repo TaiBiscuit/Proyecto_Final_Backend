@@ -8,6 +8,16 @@ class CartManager {
         this.status = 1
     }
 
+    
+    addCart = async () => {
+        try {
+            const process = await cartModel.create();
+            return process;
+        } catch (err) {
+            console.log(err.message);
+        }
+    };
+
     getCart = async () => {
         try {
             const carts = await cartModel.find().lean();
@@ -30,13 +40,14 @@ class CartManager {
 
     addProdToCart = async (cartId, prodId) => {
         try {
-            console.log(prodId)
+            const product = await productModel.find({id: prodId}).lean();
+            const productId = product[0]._id;
             const cart = await cartModel.findOneAndUpdate(
                 {id:cartId},
-                {$push: { products: prodId}},
+                {$push: { products: productId}},
                 {new: true}
                 );
-            return cart
+            return cart 
         } catch (err) {
             this.status = -1;
             console.log(err)
@@ -49,16 +60,30 @@ class CartManager {
             const cartId = cart[0]._id;
             const product = await productModel.find({id: pid}).lean();
             const productId = product[0]._id;
-            const process = await cartModel.findByIdAndUpdate(
+            console.log(productId);
+            const process = await cartModel.findOneAndUpdate(
                 new mongoose.Types.ObjectId(cartId),
-                { $pull: { products: productId}},
-                { new: true }
-            )
+                { $pull: { products: productId} },
+            );
             console.log(process);
             return process;
         } catch (err) {
             this.status = -1;
             console.log(err)
+        }
+    }
+
+    emptyCart = async (cid) => {
+        try {
+            const cart = await cartModel.find({id: cid}).lean();
+            const cartId = cart[0]._id;
+            const process = await cartModel.findOneAndUpdate(
+                new mongoose.Types.ObjectId(cartId),
+                { $set: { products: [] }
+            });
+            return process;
+        } catch (err) {
+            return false;
         }
     }
 }

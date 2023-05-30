@@ -38,10 +38,20 @@ cartsRouter.delete('/carts/:cid?/products/:pid?', async (req, res) => {
         const cartId = req.params.cid;
         const prodId = req.params.pid;
         const result = await cartManager.deleteProdFromCart(cartId, prodId);
-        res.status(200).send(prodId);
+        res.status(200).send(result);
     } catch (err) {
         res.status(500).send({status: 'EM', error: err});
     }
-})
+});
+
+cartsRouter.delete('/carts/:cid?', async (req, res) => {
+    try {
+        const cartId = req.params.cid;
+        const result = await cartManager.emptyCart(cartId);
+        res.status(200).send(result)
+    } catch (err) {
+        res.status(500).send({status: 'EM', error: err});
+    }
+});
 
 export default cartsRouter;
