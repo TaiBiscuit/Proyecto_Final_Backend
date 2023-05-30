@@ -63,7 +63,7 @@ class CartManager {
             console.log(productId);
             const process = await cartModel.findOneAndUpdate(
                 new mongoose.Types.ObjectId(cartId),
-                { $pull: { products: productId} },
+                { $pull: { products: '6476627caa2962990488b958'} },
             );
             console.log(process);
             return process;
