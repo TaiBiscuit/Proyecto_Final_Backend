@@ -58,13 +58,14 @@ class CartManager {
         try {
             const cart = await cartModel.find({id: cid}).lean();
             const cartId = cart[0]._id;
+            console.log(cartId)
             const product = await productModel.find({id: pid}).lean();
             const productId = product[0]._id;
-            console.log(productId);
+            console.log(productId)
             const process = await cartModel.findOneAndUpdate(
                 new mongoose.Types.ObjectId(cartId),
-                { $pull: { products: '6476627caa2962990488b958'} },
-            );
+                { $pull: { products: productId}
+            });
             console.log(process);
             return process;
         } catch (err) {

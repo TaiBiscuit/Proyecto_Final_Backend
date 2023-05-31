@@ -19,7 +19,7 @@ const server = http.createServer(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const SocketS = new Server(server, {
+const io = new Server(server, {
     cors: {
         origin: "*",
         methods: ["PUT", "GET", "POST", "DELETE", "OPTIONS"],
@@ -56,7 +56,7 @@ try {
 
 let prodList = [];
 
-SocketS.on('connection', sock => {
+io.on('connection', sock => {
     console.log('New connection started');
     sock.emit('prodList', prodList);
     sock.on('addProd', () => { 
