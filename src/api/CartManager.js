@@ -30,7 +30,7 @@ class CartManager {
 
     getCartPopulated = async (cartId) => {
         try {
-            const cart = await cartModel.find({id:cartId}).populate({ path: 'products.pid', model: productModel }).lean();
+            const cart = await cartModel.find({id:cartId}).lean().populate({ path: 'products.pid', model: productModel });
             return cart;
         } catch (err) {
             this.status = -1;

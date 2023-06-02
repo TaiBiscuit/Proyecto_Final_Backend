@@ -35,8 +35,8 @@
                 <p class="card-cat">{{this.category}}</p>
                 <p class="card-text">{{this.description}}</p>
                 <p class="price">${{this.price}}</p>
-                <form method="put">
-                    <button class="add-btn"><a href="{{pagination.pageURL}}/api/carts/1/products/{{this.id}}" >Add to cart</a></button>
+                <form action="{{pagination.pageURL}}/api/carts/1/products/{{this.id}}" method="post">
+                    <button type="submit" class="add-btn">Add to cart</button>
                 </form>
             </div>
         </div>
