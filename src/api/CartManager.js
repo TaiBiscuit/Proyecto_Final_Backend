@@ -30,7 +30,7 @@ class CartManager {
 
     getCartPopulated = async (cartId) => {
         try {
-            const cart = await cartModel.find({id:cartId}).populate({ path: 'products.pid', model: productModel });
+            const cart = await cartModel.find({id:cartId}).populate({ path: 'products.pid', model: productModel }).lean();
             return cart;
         } catch (err) {
             this.status = -1;
@@ -58,16 +58,12 @@ class CartManager {
         try {
             const cart = await cartModel.find({id: cid}).lean();
             const cartId = cart[0]._id;
-            console.log(cartId)
-            const product = await productModel.find({id: pid}).lean();
-            const productId = product[0]._id;
-            console.log(productId)
+            cart[0].products.splice(pid-1, 1);
             const process = await cartModel.findOneAndUpdate(
                 new mongoose.Types.ObjectId(cartId),
-                { $pull: { products: productId}
-            });
-            console.log(process);
-            return process;
+                { $set: { products: cart[0].products}
+            })
+            return cart;
         } catch (err) {
             this.status = -1;
             console.log(err)

@@ -19,7 +19,7 @@
                 {{else}}
                     <li><a href="{{pagination.nextPageUrl}}">>></a></li>
                 {{/if}}
-                <li><a href="{{pagination.pageURL}}/api/carts">Cart</a></li>
+                <li><a href="{{pagination.pageURL}}/api/carts/1">Cart</a></li>
             </ul>
         </nav>
     </div>
@@ -35,8 +35,8 @@
                 <p class="card-cat">{{this.category}}</p>
                 <p class="card-text">{{this.description}}</p>
                 <p class="price">${{this.price}}</p>
-                <form action="">
-                    <button class="add-btn">Add to cart</button>
+                <form method="put">
+                    <button class="add-btn"><a href="{{pagination.pageURL}}/api/carts/1/products/{{this.id}}" >Add to cart</a></button>
                 </form>
             </div>
         </div>

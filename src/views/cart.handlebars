@@ -6,7 +6,9 @@
            </br>
            <p>Products: </p>
            <ul>
-           
+            {{#each carts}}
+            <li>{{this._id}}</li>
+            {{/each}}
            </ul>
         </div>
     </div>

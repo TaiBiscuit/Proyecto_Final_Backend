@@ -6,17 +6,20 @@ const cartManager = new CartManager();
 
 cartsRouter.get('/carts', async (req, res) => {
     try {
-        const cartId = req.query.cid;
+        const cart = await cartManager.getCart();
+        console.log(cart)
+        res.status(200).send(cart);
+        } catch (err) {
+        res.status(500).send({status: 'EM', error: err});
+    }
+});
 
-        if(cartId != undefined) {
-            const cartId = req.query.cid;
-            const cartFiltered = await cartManager.getCartPopulated(cartId)
-            res.status(200).send(cartFiltered);
-        } else {
-            const cart = await cartManager.getCart();
-            console.log(cart)
-            res.status(200).send(cart);
-        }
+cartsRouter.get('/carts/:cid', async (req, res) => {
+    try {
+        const cartId = req.params.cid;
+        const cartFiltered = await cartManager.getCartPopulated(cartId);
+        const cartProducts = cartFiltered[0].products
+        res.render('cart', {carts: cartProducts})
     } catch (err) {
         res.status(500).send({status: 'EM', error: err});
     }
