@@ -10,6 +10,7 @@ router.get('/', async (req, res) => {
     showProducts.then(products => {res.render('home', {layout: 'main', products})});
 });
 
+router.get()
 
 // Websocket
 
