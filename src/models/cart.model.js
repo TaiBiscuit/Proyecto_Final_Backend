@@ -8,11 +8,16 @@ const collection = 'carts';
 const schema = new mongoose.Schema({
     id: Number,
     products:[{
-        pid: { type: mongoose.Schema.Types.ObjectId},
-        qty: Number
-    }
-
-    ]
+        product: { 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'products',
+        },
+        quantity: {
+            type: Number,
+            default: 1,
+        },
+    },
+    ],
 });
 
 

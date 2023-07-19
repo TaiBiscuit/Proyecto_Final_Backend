@@ -8,6 +8,7 @@ import __dirname from './utils.js';
 import { Server } from 'socket.io';
 import productsRouter from './routes/products.routes.js';
 import cartsRouter from './routes/carts.routes.js';
+import chatRouter from './routes/chat.routes.js';
 
 
 const app = express();
@@ -33,6 +34,7 @@ app.set('views', __dirname + '/views');
 
 app.use('/api', cartsRouter);
 app.use('/api', productsRouter);
+app.use('/api', chatRouter);
 
 
 
@@ -43,8 +45,8 @@ app.use('/api', productsRouter);
 try {
     MongoSingleton.getInstance();
 
-    server.listen(config.PORT, () => {
-        console.log(`Server connected at ${config.PORT}`);
+    server.listen(3000, () => {
+        console.log(`Server connected at ${3000}`);
     });
 } catch (err) {
     console.log(err)
@@ -64,5 +66,15 @@ io.on('connection', sock => {
     });
     sock.on('delProd', () => {
         io.sockets.emit('prodList', prodList);
+    });
+    sock.emit('server_confirm', 'Conexión recibida');
+    sock.on("disconnect", (reason) => {
+        console.log(`Cliente desconectado (${sock.id}): ${reason}`);
+    });
+    sock.on('event_cl01', (data) => {
+        console.log(data);
+    });
+    sock.on('message', (data) => {
+        io.emit('message_received', data);
     });
 });  

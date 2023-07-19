@@ -4,8 +4,6 @@ import { checkIfValid } from '../controllers/isAdmin.js';
 
 const productsRouter = Router();
 
-productsRouter.get('/products', checkIfValid, getProducts)
-
-
+productsRouter.get('/products', checkIfValid, getProducts);
 
 export default productsRouter;

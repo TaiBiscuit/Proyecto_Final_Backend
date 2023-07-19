@@ -13,7 +13,6 @@ export const getProducts = async (req, res) => {
             for(let i = 0; i < result.totalPages; i++) {
                 pages.push({index: i, indexPgBar: i+1});
             }
-
             const pagination = {
                 pageUrl: config.PAGE_URL,
                 limit: limit,
@@ -27,8 +26,8 @@ export const getProducts = async (req, res) => {
                 hasNextPage: result.hasNextPage,
                 pagesArray: pages
             }
+
             res.render('paginProducts', {products: result.docs, pagination: pagination});
-        return productsRouter
     } catch(err) {
         res.status(500).send(err.message);
     }

@@ -1,0 +1,69 @@
+<div class="container-fluid">
+    <div class="row">
+        <header class="bg-success text-white p-3" style="height: 25vh;">
+            <h1><b>Chat</b></h1>
+        </header>
+    </div>
+    <div class="row">
+        <div class="col-12 m-3">
+            <div>
+                <input type="text" id="chat-box">
+            </div>
+            <div>
+                <p id="txt-box"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const ws = io('ws://localhost:3050');
+
+    ws.on('connect', () => {
+        ws.emit('event_cl01', 'Este es el primer mensaje desde el cliente 01');
+        ws.on('server_confirm', (msg) => {
+            console.log(msg);
+        });
+    });
+
+    ws.on('message_received', (msg) => {
+        console.log('Mensaje recibido')
+        messageList.innerHTML = `${messageList.innerHTML} user: ${msg.user} : message: ${msg.message} <br>`;
+        console.log(msg)
+    });
+
+    //Sweetalert
+
+    let user;
+
+    const swalConfig = {
+        title:'Welcome',
+        text:'Write your name to begin',
+        input:'text',
+        inputValidator: (value) => {
+            return !value && 'Write your name to begin'
+        },
+    allowOutsideClick:false
+    }
+
+    Swal.fire(swalConfig).then(res => {
+        user = res.value
+        console.log(user)
+    });
+
+    //Chat box
+
+    const chatBox = document.getElementById('chat-box');
+    const messageList = document.getElementById('txt-box');
+
+    chatBox.addEventListener('keyup', event => {
+        if(event.key === 'Enter'){
+            if(chatBox.value.trim().length > 0){
+                ws.emit('message', {user: user, message: chatBox.value});
+                chatBox.value = '';
+            }
+        }
+    });
+</script>
