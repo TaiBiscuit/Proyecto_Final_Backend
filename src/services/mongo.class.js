@@ -12,7 +12,7 @@ export default class MongoSingleton {
     static getInstance() {
         if (!this.#instance) {
             this.#instance = new MongoSingleton();
-            console.log('Conexión bbdd CREADA');
+            console.log(`Server connected at 3000`);
         } else {
             console.log('Conexión bbdd RECUPERADA');
         }

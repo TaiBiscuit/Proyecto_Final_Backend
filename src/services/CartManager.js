@@ -40,9 +40,51 @@ class CartManager {
 
     addProdToCart = async (cartId, prodId) => {
         try {
-            const product = await productModel.find({id: prodId}).lean();
+
+            let prepForCart = []
+            const product = await productModel.find({_id: prodId}).lean();
             const productId = product[0]._id;
-            const cart1 = await cartModel.findById(parseInt(cartId))
+            const currentCart = await cartModel.find({id:cartId}).lean();
+            const currentCartProducts = currentCart[0].products;
+            if(currentCartProducts.length == 0) {
+                const cart = await cartModel.findOneAndUpdate(
+                    {id:cartId},
+                    {$push: { products: {_id: productId}}},
+                    {new: true}
+                    );
+            } else {
+                currentCartProducts.forEach( async prod => {
+                    if (prod._id == productId) {
+                        console.log('esta!');
+                    } else {
+                        console.log(prod._id)
+                        console.log(productId)
+                        const cart = await cartModel.findOneAndUpdate(
+                            {id:cartId},
+                            {$push: { products: {_id: prod._id}}},
+                            {new: true}
+                            ); 
+                            console.log('no esta!')
+                    }
+                }); 
+/*                 currentCartProducts.forEach( async prod => {
+                     const cart = await cartModel.findOneAndUpdate(
+                        {id:cartId},
+                        {$push: { products: {_id: prod._id}}},
+                        {new: true}
+                        ); 
+                }); */
+            }
+/* 
+            prepForCart.forEach( async prod => {
+                const cart = await cartModel.findOneAndUpdate(
+                    {id:cartId},
+                    {$push: { products: prod}},
+                    {new: true}
+                    );
+                console.log(`Elem: ${prod}`)
+            });  */
+            /*
             const found = cart1.find(productId)
             console.log(found)
             const cart = await cartModel.findOneAndUpdate(
@@ -50,7 +92,7 @@ class CartManager {
                 {$push: { products: productId}},
                 {new: true}
                 );
-            return cart 
+            return cart  */
         } catch (err) {
             this.status = -1;
             console.log(err)

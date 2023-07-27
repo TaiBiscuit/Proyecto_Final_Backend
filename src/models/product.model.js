@@ -5,7 +5,7 @@ mongoose.pluralize(null);
 const collection = 'products';
 
 const schema = new mongoose.Schema({
-    id: Number,
+    id: String,
     title: { type: String, required: true },
     price: String,
     description: { type: String, required: true },

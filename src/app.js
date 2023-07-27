@@ -9,6 +9,7 @@ import { Server } from 'socket.io';
 import productsRouter from './routes/products.routes.js';
 import cartsRouter from './routes/carts.routes.js';
 import chatRouter from './routes/chat.routes.js';
+import testRouter from './routes/test.routes.js';
 
 
 const app = express();
@@ -35,6 +36,7 @@ app.set('views', __dirname + '/views');
 app.use('/api', cartsRouter);
 app.use('/api', productsRouter);
 app.use('/api', chatRouter);
+app.use('/api', testRouter);
 
 
 
@@ -46,7 +48,6 @@ try {
     MongoSingleton.getInstance();
 
     server.listen(3000, () => {
-        console.log(`Server connected at ${3000}`);
     });
 } catch (err) {
     console.log(err)

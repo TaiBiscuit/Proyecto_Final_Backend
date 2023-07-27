@@ -65,7 +65,7 @@ export const addProdFromPage = async (req, res) => {
         const cartId = req.params.cid;
         const prodId = req.params.pid;
         const product = await productManager.getProductsById(prodId);
-        const result = await manager.addProdToCart(cartId, product.id);
+        const result = await manager.addProdToCart(cartId, product._id.toHexString());
         const cartFiltered = await manager.getCartPopulated(cartId);
         const cartProducts = cartFiltered[0].products;
         res.render('cart', {carts: cartProducts}); 
@@ -83,9 +83,10 @@ export const purchaseCart = async (req, res) => {
         let errorProd = [];
         const cartId = req.params.cid;
         const cartFiltered = await manager.getCartPopulated(cartId);
-        const products = cartFiltered[0].products
-        products.forEach(element => {
-            console.log(element)
+        const products = cartFiltered[0].products;
+        products.forEach(async element => {
+            const productId = element._id.toHexString()
+            const chosenProduct = await productManager.getProductsBy_Id(productId)
         });
 
 /*  
