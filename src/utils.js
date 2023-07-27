@@ -6,7 +6,7 @@ const faker = new Faker({ locale: [en]});
 
 export const generateProducts = async () => {
     let products = [];
-    for(let i = 0; i < 10; i++) {
+    for(let i = 0; i < 100; i++) {
          products.push({
             id : faker.database.mongodbObjectId(),
             title : faker.commerce.productName(),
