@@ -1,6 +1,4 @@
 import express from 'express';
-import cors from 'cors';
-import config from './config.js';
 import MongoSingleton from './services/mongo.class.js';
 import http from 'http';
 import { engine } from 'express-handlebars';
@@ -32,6 +30,7 @@ app.use('/public', express.static(`${__dirname}/public`));
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + '/views');
+
 
 app.use('/api', cartsRouter);
 app.use('/api', productsRouter);
